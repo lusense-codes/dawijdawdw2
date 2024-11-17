@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>losteverything</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #fff;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            filter: blur(10px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .content-container.visible {
+            filter: blur(0);
+            opacity: 1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .enter-text {
+            color: #fff;
+            font-size: 40px;
+            text-transform: lowercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.4); /* Reduced glow */
+            transition: all 0.3s ease;
+        }
+
+        .enter-text.reduced-glow {
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.2); /* Even less glow after the click */
+        }   
+        
+
+        .overlay:hover .enter-text {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        h1, .link, .ip-info {
+            color: #fff;
+            text-transform: lowercase;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center; /* Aligns the icons horizontally */
+            align-items: center;    /* Aligns the icons vertically */
+            gap: 30px; /* Adds space between the icons */
+            margin: 20px 0;
+        }
+
+        .link {
+            color: white;
+            font-size: 40px; /* Reduced the icon size from 50px to 40px */
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .link:hover {
+            transform: scale(1.2); /* Enlarges the icon on hover */
+            opacity: 0.8; /* Slight opacity change for effect */
+        }
+
+        .ip-info {
+            margin-top: 30px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 20px;
+            background-color: #fff;
+            margin-left: 5px;
+            animation: blink 0.8s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+}
+        
+        .volume-control {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .volume-control i {
+            color: #fff;
+            font-size: 24px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .volume-control input {
+            width: 150px;
+            -webkit-appearance: none;
+            background: #444;
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .volume-control input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            background: #fff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .volume-control input::-moz-range-thumb {
+            background: #fff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="enter-text">Click to enter</div>
+    </div>
+    
+    <div class="content-container">
+        <h1>losteverything</h1>
+        <div class="links">
+            <a class="link tiktok" href="https://www.tiktok.com/@yahya.v4" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a class="link" href="https://www.instagram.com/yahya.yazjeen" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a class="link discord" href="https://discord.gg/trumps" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-discord"></i>
+            </a>
+        </div>
+
+        <div class="ip-info">
+            <p><span class="ip"></span><span class="cursor"></span></p>
+        </div>
+    </div>
+
+ 
+    <audio id="backgroundMusic" src="Scorpio.mp3" preload="auto"></audio>
+
+   
+    <div class="volume-control">
+        
+        <i class="fas fa-volume-up" id="volumeIcon"></i>
+        <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5">
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            
+            $.getJSON('https://api.ipify.org/?format=json', function (e) {
+                const ip = e.ip;
+                const $ip = $('.ip');
+                const $cursor = $('.cursor');
+
+                let typingSpeed = 100;
+                let erasingSpeed = 100;
+                let pauseTime = 2000;
+                let index = 0;
+
+                function typeText() {
+                    if (index < ip.length) {
+                        $ip.text($ip.text() + ip[index]);
+                        index++;
+                        setTimeout(typeText, typingSpeed);
+                    } else {
+                        setTimeout(eraseText, pauseTime);
+                    }
+                }
+
+                function eraseText() {
+                    if (index > 0) {
+                        $ip.text($ip.text().slice(0, -1));
+                        index--;
+                        setTimeout(eraseText, erasingSpeed);
+                    } else {
+                        setTimeout(typeText, pauseTime);
+                    }
+                }
+
+                setTimeout(typeText, 1500); 
+            });
+
+            $('.overlay').on('click', function() {
+                $('.overlay .enter-text').fadeOut(800);  
+                setTimeout(() => {
+                    $(this).fadeOut(800);  
+                    $('.content-container').addClass('visible');
+
+                    
+                    document.getElementById('backgroundMusic').play();
+
+                    
+                    $('.volume-control').css('visibility', 'visible').animate({ opacity: 1 }, 800);
+                }, 200);
+            });
+
+            
+            $('#volumeControl').on('input', function() {
+                const volume = $(this).val();
+                document.getElementById('backgroundMusic').volume = volume;
+            });
+
+            
+            $('#volumeIcon').on('click', function() {
+                const audio = document.getElementById('backgroundMusic');
+                if (audio.muted) {
+                    audio.muted = false;
+                    $('#volumeIcon').removeClass('fa-volume-mute').addClass('fa-volume-up');
+                    $('#volumeControl').val(audio.volume);
+                } else {
+                    audio.muted = true;
+                    $('#volumeIcon').removeClass('fa-volume-up').addClass('fa-volume-mute');
+                    $('#volumeControl').val(0);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
