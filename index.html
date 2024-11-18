@@ -185,52 +185,21 @@
         }
 
         .admin-panel {
+            display: none; /* Hide by default */
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            background: rgba(15, 15, 15, 0.95);
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 2000;
-            display: none;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
         }
 
-        .admin-panel input {
-            width: 100%;
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 5px;
-        }
-
-        .admin-panel button {
-            width: 100%;
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .admin-panel button:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .admin-panel h2 {
-            margin-bottom: 1rem;
-            color: white;
-            font-size: 1.5rem;
-        }
 
         .close-admin {
             position: absolute;
@@ -239,8 +208,142 @@
             background: none;
             border: none;
             color: white;
+            font-size: 24px;
             cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .close-admin:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .last-login {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            outline: none;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        .admin-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-card i {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .stat-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
             font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .admin-controls h3 {
+            margin: 1.5rem 0 1rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .logout-btn {
+            margin-top: 2rem;
+            background: rgba(255, 59, 59, 0.2);
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 59, 59, 0.3);
+        }
+
+        .error-message {
+            color: #ff5757;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 20px;
         }
 
         .volume-control {
@@ -390,120 +493,215 @@
 
     <div class="admin-panel" id="adminPanel">
         <button class="close-admin" onclick="closeAdminPanel()">×</button>
-        <h2>Admin Panel</h2>
-        <input type="password" id="adminPassword" placeholder="Admin Password">
-        <button onclick="verifyPassword()">Login</button>
-        
-        <div id="viewControls" style="display: none;">
-            <input type="number" id="newViewCount" placeholder="New View Count">
-            <button onclick="updateViews()">Update Views</button>
+        <div id="loginSection">
+            <h2>Admin Login</h2>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="adminUsername" placeholder="Username">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="adminPassword" placeholder="Password">
+            </div>
+            <button onclick="verifyPassword()" class="admin-btn">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+            <div id="loginError" class="error-message"></div>
         </div>
-    </div>
 
-    <div class="admin-panel" id="adminPanel">
-        <button class="close-admin" onclick="closeAdminPanel()">×</button>
-        <h2>Admin Panel</h2>
-        <input type="password" id="adminPassword" placeholder="Admin Password">
-        <button onclick="verifyPassword()">Login</button>
-        
-        <div id="viewControls" style="display: none;">
-            <input type="number" id="newViewCount" placeholder="New View Count">
-            <button onclick="updateViews()">Update Views</button>
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" style="display: none;">
+            <div class="admin-header">
+                <h2>Admin Dashboard</h2>
+                <span id="lastLogin" class="last-login">Last login: Never</span>
+            </div>
+            
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <i class="far fa-eye"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalViews">0</span>
+                        <span class="stat-label">Total Views</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="todayViews">0</span>
+                        <span class="stat-label">Today's Views</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-controls">
+                <h3>View Management</h3>
+                <div class="control-group">
+                    <input type="number" id="newViewCount" placeholder="New View Count">
+                    <button onclick="updateViews()" class="admin-btn">
+                        <i class="fas fa-save"></i> Update
+                    </button>
+                </div>
+
+                <h3>Profile Settings</h3>
+                <div class="control-group">
+                    <input type="text" id="newUsername" placeholder="New Username">
+                    <button onclick="updateUsername()" class="admin-btn">
+                        <i class="fas fa-user-edit"></i> Update
+                    </button>
+                </div>
+
+                <h3>Security</h3>
+                <div class="control-group">
+                    <input type="password" id="newPassword" placeholder="New Password">
+                    <button onclick="updatePassword()" class="admin-btn">
+                        <i class="fas fa-key"></i> Change Password
+                    </button>
+                </div>
+
+                <button onclick="logout()" class="admin-btn logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        $(document).ready(function() {
-            
-            initializeViews();
-
-            
-            document.addEventListener('keydown', function(e) {
-                
-                if (e.ctrlKey && e.altKey && e.key === 'a') {
-                    openAdminPanel();
-                }
-            });
-        });
-
-        
-
-        
-        function initializeViews() {
-            
-            if (!sessionStorage.getItem('viewCounted')) {
-                let views = localStorage.getItem('profileViews');
-                views = views ? parseInt(views) : 0;
-                
-                
-                views++;
-                localStorage.setItem('profileViews', views);
-                sessionStorage.setItem('viewCounted', 'true');
-                
-                
-                updateViewDisplay(views);
-            } else {
-                
-                let views = localStorage.getItem('profileViews') || 0;
-                updateViewDisplay(views);
-            }
-        }
-
-        function updateViewDisplay(count) {
-            $('#viewCount').text(count);
-        }
-
-        
-        function openAdminPanel() {
-            document.getElementById('adminPanel').style.display = 'block';
-        }
-
-        function closeAdminPanel() {
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('adminPassword').value = '1992';
-            document.getElementById('viewControls').style.display = 'none';
-        }
+        const ADMIN_CREDENTIALS = {
+            username: 'lusense',
+            password: 'ldaddy22'
+        };
 
         function verifyPassword() {
+            const username = document.getElementById('adminUsername').value;
             const password = document.getElementById('adminPassword').value;
-           
-            if (password === 'ldaddy22') {
-                document.getElementById('viewControls').style.display = 'block';
-                document.getElementById('adminPassword').style.display = 'none';
-                document.getElementById('newViewCount').value = localStorage.getItem('profileViews') || 0;
+            const errorElement = document.getElementById('loginError');
+
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('dashboardSection').style.display = 'block';
+                
+                
+                const now = new Date().toLocaleString();
+                localStorage.setItem('lastLogin', now);
+                document.getElementById('lastLogin').textContent = `Last login: ${now}`;
+                
+                
+                updateStats();
             } else {
-                alert('Incorrect password');
+                errorElement.textContent = 'Invalid credentials';
+                setTimeout(() => errorElement.textContent = '', 3000);
             }
+        }
+
+        function updateStats() {
+            const totalViews = localStorage.getItem('profileViews') || 0;
+            document.getElementById('totalViews').textContent = totalViews;
+            
+            
+            const todayViews = sessionStorage.getItem('todayViews') || 0;
+            document.getElementById('todayViews').textContent = todayViews;
         }
 
         function updateViews() {
             const newCount = parseInt(document.getElementById('newViewCount').value);
             if (!isNaN(newCount) && newCount >= 0) {
                 localStorage.setItem('profileViews', newCount);
-                updateViewDisplay(newCount);
-                closeAdminPanel();
+                updateStats();
+                updateViewDisplay();
+                showNotification('Views updated successfully');
             } else {
-                alert('Please enter a valid number');
+                showNotification('Please enter a valid number', 'error');
             }
         }
 
-       
+        function updateUsername() {
+            const newUsername = document.getElementById('newUsername').value.trim();
+            if (newUsername) {
+                document.querySelector('h1').textContent = newUsername;
+                showNotification('Username updated successfully');
+            } else {
+                showNotification('Please enter a valid username', 'error');
+            }
+        }
+
+        function updatePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            if (newPassword.length >= 6) {
+                ADMIN_CREDENTIALS.password = newPassword;
+                showNotification('Password updated successfully');
+                document.getElementById('newPassword').value = '';
+            } else {
+                showNotification('Password must be at least 6 characters', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            
+            let notification = document.querySelector('.admin-notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.className = 'admin-notification';
+                document.body.appendChild(notification);
+            }
+            
+            notification.textContent = message;
+            notification.className = `admin-notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function logout() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('dashboardSection').style.display = 'none';
+            document.getElementById('adminUsername').value = '';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        
+        if (!sessionStorage.getItem('todayViews')) {
+            sessionStorage.setItem('todayViews', '1');
+        } else {
+            sessionStorage.setItem('todayViews', 
+                parseInt(sessionStorage.getItem('todayViews')) + 1);
+        }
+
+        
+        const lastLogin = localStorage.getItem('lastLogin');
+        if (lastLogin) {
+            document.getElementById('lastLogin').textContent = `Last login: ${lastLogin}`;
+        }
     </script>
-
-<script>
+  
+  <script>
     $(document).ready(function() {
-       
-
         
-        document.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
+                const adminPanel = document.getElementById('adminPanel');
+                if (adminPanel.style.display === 'none' || adminPanel.style.display === '') {
+                    adminPanel.style.display = 'block';
+                }
+            }
         });
-
-        
     });
+
+    function openAdminPanel() {
+        document.getElementById('adminPanel').style.display = 'block';
+    }
+
+    function closeAdminPanel() {
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('adminUsername').value = '';
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('loginSection').style.display = 'block';
+        document.getElementById('dashboardSection').style.display = 'none';
+    }
 </script>
 
-    
+
     <script>
         $(document).ready(function() {
            
